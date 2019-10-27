@@ -15,4 +15,9 @@ module.exports = {
       theme: true
     }
   }
+  // chainWebpack(config){
+  //   config.resolve.alias
+  //      .set("api",resolve('src/api'))
+  // }
+
 }

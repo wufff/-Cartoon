@@ -27,7 +27,8 @@
 </template>
 <script>
    import list from './components/list.vue'
-   import navscroll from './components/navscroll.vue'
+   import navscroll from './components/navscroll.vue';
+   import { getData } from '@/api';
    export default {
       name: 'app',
       data() {
@@ -50,6 +51,9 @@
           showDtail: false,
         }
       },
+      created(){
+        console.log(getData);
+      },      
       methods:{
          detail(){
            this.showDtail = true;
@@ -72,6 +76,7 @@
             this.detailcamp.show(); 
           }
       },
+    
       components:{
          list,
          navscroll
