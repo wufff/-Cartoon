@@ -7,73 +7,97 @@
             休闲驿站
         </div>
         <div class="g-nav_wrap">
-            <navscroll></navscroll>  
-            <span class="navmore" @click="showNavDtail"><img src="./assets/more.png" alt=""></span>
+            <navscroll :navData="navData"  @resList="getList"  ref="navscroll"></navscroll>  
+            <span class="navmore" @click="showNavDtail"><img src="./assets/more.png" alt="" v-show="navData.data.length > 4"></span>
             <div class="navmoreContent" v-show="navShow">
                <h4>漫画分类</h4>
                <span class="deleBtn" @click="hideNav">
                    <img src="./assets/dele.png" alt="">
                  </span>
                <div class="main">
-                  <span v-for="(item,index) in navs" :key="index">{{item}}</span>
+                  <span v-for="(item,index) in navData.data" 
+                  :key="index" 
+                  :class="{active:index == navData.current}" 
+                  @click="choice(index,item.class_id)"
+                  >{{item.class_name}}</span>
                </div>
             </div>
         </div>
-       <list  @func="goDtail"></list>
-      
-        
-         
+        <list  @func="goDtail" :datalist="datalist" ref="list"></list>
   </div>
 </template>
 <script>
    import list from './components/list.vue'
    import navscroll from './components/navscroll.vue';
-   import { getData } from '@/api';
+   import { getlist , getNav ,getDtail } from '@/api';
    export default {
       name: 'app',
       data() {
         return {
-          detailData:[1, 2, 3, 4, 5],
-          current: '快车',
+          navData:{
+            data:[],
+            current:0,
+            currentId:0
+          },
+          datalist:[],
+          current:0,   
+          detailData:{},
           navShow:false,
-          navs: [
-            '快车',
-            '小巴',
-            '专车',
-            '顺风车',
-            '代驾',
-            '公交',
-            '自驾租车',
-            '豪华车',
-            '二手车',
-            '出租车'
-          ],
+          navs: [],
+          Off:true,
           showDtail: false,
         }
       },
       created(){
-        console.log(getData);
+          getNav().then((res)=>{
+             this.navData.data = res.data;
+             this.navData.data.unshift({class_name:"全部",class_id:0});
+             this.navData.currentId = res.data[0].class_id;  
+             this.getList();
+          })
       },      
       methods:{
          detail(){
            this.showDtail = true;
          },
-         changeHandler(cur) {
-            console.log(cur)
-          },
           showNavDtail(){
              this.navShow = true;
           },
           hideNav(){
             this.navShow = false;
           },
+          datailOff(boon){
+             this.Off = true;
+          },
           goDtail(id){
-             this.detailcamp = this.detailcamp || this.$createDetail({
-                 $props:{
-                    detailData:"detailData"
-                 }
+             var _this = this;
+            if(_this.Off){
+              _this.Off = false;
+             getDtail({id:id}).then((res)=>{
+                _this.detailData = res.data;
+                _this.detailcamp =  _this.$createDetail({
+                     $props:{
+                        detailData:_this.detailData,
+                     },
+                     $events:{
+                        off:_this.datailOff
+                     }
+                  })
+                 _this.detailcamp.show();         
              })
-            this.detailcamp.show(); 
+            } 
+          },
+          choice(index,class_id){
+              this.$refs.navscroll.choice(index,class_id);
+          },
+          getList(){
+               getlist({id:this.navData.currentId}).then((res)=>{
+                  console.log(res.data)
+                  this.datalist = res.data;
+             })                 
+          },
+          getDtail(id){
+
           }
       },
     
@@ -165,6 +189,9 @@
          margin-right: 20px;
          margin-bottom: 20px;
       }
+     span.active {
+       color:#08ce5b;
+     }
    }
 }
 
@@ -190,7 +217,6 @@
     position: relative;
     top:-4px;
 }
-
 
 
 

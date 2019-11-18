@@ -14,7 +14,8 @@ module.exports = {
       postCompile: true,
       theme: true
     }
-  }
+  },
+  publicPath:"./",
   // chainWebpack(config){
   //   config.resolve.alias
   //      .set("api",resolve('src/api'))

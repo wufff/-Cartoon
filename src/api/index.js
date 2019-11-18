@@ -1,8 +1,12 @@
 import { get } from './definition';
-const getData = get("/api/adfa");
 
+const getNav = get("/comic/classListForAjax");
+const getlist = get("/comic/comicListForAjax");
+const getDtail = get("/comic/comicInfoForAjax");
 
 export {
-	 getData
+	 getlist,
+	 getNav,
+	 getDtail
 }
 

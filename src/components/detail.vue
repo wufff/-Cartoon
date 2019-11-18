@@ -5,15 +5,13 @@
                      <span class="backBtn" @click.stop="hide">
                         <img src="../assets/back.png" alt="">
                      </span>
-                     七龙珠之魔人布欧 {{currut}}/{{detailData.length}}
+                     {{detailData.comic_title}} {{currut}}/{{detailData.comic_content.length}} 
           </div>                      
     	    <swiper :options="swiperOption" ref="mySwiper">
-    		    <swiper-slide v-for="(slide, index) in detailData" :key="index">
+    		    <swiper-slide v-for="(slide, index) in detailData.comic_content" :key="index">
     		    	 <div class="inner">            
                   <div class="mask" v-show="!day"></div>
-                  <div class="page">
-                    
-                  </div>
+                  <div class="page" :style="{backgroundImage:'url(' + slide + ')'}"></div>
     		    	 </div>
     		    </swiper-slide>
     		    <!-- <div class="swiper-pagination" slot="pagination"></div> -->
@@ -34,7 +32,7 @@
                     <img src="../assets/mday.png"  v-show="day">
                 </span>   
           </div>
-          <div class="title_c" v-show="!control">七龙珠之魔人布欧 {{currut}}/{{detailData.length}}</div>           
+          <div class="title_c" v-show="!control">{{detailData.comic_title}} {{currut}}/{{detailData.comic_content.length}}</div>           
       </div>
   </transition> 
 </template>
@@ -44,7 +42,8 @@
     name: 'Detail',
     props:{
        detailData:{
-          
+         type:Object,
+         default:{}          
        }
     },
     data() {
@@ -54,6 +53,7 @@
         direc:true,
         visible:false,
         day:true,
+        off:true,
         control:true,
         swiperOption:{
           // some swiper options/callbacks
@@ -82,6 +82,7 @@
       // console.log('this is current swiper instance object',this.swiper)
        // console.log(this.$refs.mySwiper)
       // this.swiper.slideTo(3, 1000, false)
+      // console.log(this.detailData);
     },
     methods:{
       direction(){
@@ -92,10 +93,11 @@
          this.day = !this.day;
       },
       show(){
-         this.visible = true;
+            this.visible = true;
       },
       hide(){
         this.visible = false;
+        this.$emit('off',true)
       },
       showControl(){
          this.control = !this.control;
@@ -222,7 +224,6 @@
          left:0;
          right: 0;
          bottom: 0;
-         background-image: url('../assets/page.png');
          background-repeat: no-repeat;
          background-position: center; 
         
@@ -238,7 +239,7 @@
   
 
   .fade-enter-active, .fade-leave-active {
-     transition: .4s;
+     transition: .3s;
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
      transform:translateX(100%);

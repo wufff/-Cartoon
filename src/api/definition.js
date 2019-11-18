@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 var instance = axios.create({
-  baseURL: 'http://www.wayperfect.com:888/',
+  baseURL: 'http://wuya.fztk.dev.dodoedu.com',
   timeout: 5000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 });
@@ -9,13 +9,15 @@ var instance = axios.create({
 
 export function get(url) {
 	 return function (params){
-	      return axios.get(url,{
+	      return instance.get(url,{
 	      	 params
 	      }).then((res) => {
-	      	 const { errno,data } = res.data;
-	      	 if(errno == 0){
-	      	 	  return data;
-	      	 }
+	      	 // const { errno,data } = res.data;
+	      	 // if(errno == 0){
+	      	 // 	  return data;
+	      	 // }
+	      	 // console.log(res);
+	      	 return res.data;
 	      }).catch(()=>{
 	      	 
 	      })
