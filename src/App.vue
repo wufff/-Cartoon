@@ -23,7 +23,7 @@
                </div>
             </div>
         </div>
-        <list  @func="goDtail" :datalist="datalist" ref="list"></list>
+        <list  ref="list"  @func="goDtail" :datalist="datalist"  @loadmore="more"></list>
   </div>
 </template>
 <script>
@@ -46,6 +46,7 @@
           navs: [],
           Off:true,
           showDtail: false,
+          totle:0
         }
       },
       created(){
@@ -91,13 +92,29 @@
               this.$refs.navscroll.choice(index,class_id);
           },
           getList(){
-               getlist({id:this.navData.currentId}).then((res)=>{
-                  console.log(res.data)
+               this.$refs.list.initPage(); 
+               getlist({id:this.navData.currentId,p:1,num:9}).then((res)=>{
+                  var lastPage = res.count % 9;
+                  if(lastPage > 0){
+                     this.totle = parseInt(res.count/9) + 1;
+                  }else{
+                      this.totle = parseInt(res.count/9);
+                  }
                   this.datalist = res.data;
              })                 
           },
           getDtail(id){
 
+          },
+          more(p){
+             console.log(this.totle)
+             if(p > this.totle) {
+                 this.$refs.list.finish();
+             }else{
+                 getlist({id:this.navData.currentId,p:p,num:9}).then((res)=>{
+                        this.datalist.push(...res.data);
+                 })                
+             }
           }
       },
     
@@ -106,6 +123,8 @@
          navscroll
       }
 }
+
+// comicListForAjax  参数:id,p,num   返回参数增加了一个count字段
 </script>
 <style lang="less">
 
@@ -164,6 +183,10 @@
       right: 0;
       z-index: 999;
       padding: 20px 14px 5px 14px;
+      .main {
+         overflow: hidden;
+         padding-top: 2px;
+      }
       .deleBtn {
          display: block;
          height: 11px;
@@ -179,7 +202,7 @@
       h4 {
           font-size: 18px;
           width: 80px; 
-          letter-spacing: 2px;  
+          // letter-spacing: 2px;  
           margin-bottom: 24px;
       } 
       span {
@@ -219,8 +242,17 @@
 }
 
 
-
-
+ body .cube-pullup-wrapper .before-trigger {
+   
+ }
+ .cube-pullup-wrapper .before-trigger span{
+      font-size: 16px;
+      color:#919191;
+      display: block;
+      height: 16px;
+      line-height: 16px;
+      margin: 0 auto;
+  }
 
 
 

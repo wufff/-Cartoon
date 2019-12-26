@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 var instance = axios.create({
-  baseURL: 'http://wuya.fztk.dev.dodoedu.com',
+  baseURL: 'http://xxyz.dev.dodoedu.com',
   timeout: 5000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 });

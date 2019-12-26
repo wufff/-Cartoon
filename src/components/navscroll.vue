@@ -64,7 +64,6 @@
                     }
                     // _this.navData.current = _this.swiperNav.clickedIndex
                     _this.navData.current  = index;
-                    console.log(timeid);
                     _this.navData.currentId = timeid;
                     // slides[_this.swiperNav.clickedIndex].classList.add("active"); 
                     // slides.forEach((slide)=>{
@@ -84,6 +83,7 @@
   overflow: hidden;
   font-size:15px;
   padding-left: 5px;
+  padding-right: 20px;
 }
 #topNav .swiper-slide {
   letter-spacing:2px;
