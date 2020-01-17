@@ -87,7 +87,6 @@
 }
 #topNav .swiper-slide {
   letter-spacing:2px;
-  width:90px;
   padding: 22px 12px;
   text-align:center;
   width:auto;
